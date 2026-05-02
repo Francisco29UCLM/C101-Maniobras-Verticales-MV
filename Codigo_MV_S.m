@@ -180,17 +180,15 @@ fprintf('\n');
 % ============================================================
 %
 %  Eje tangencial (V = cte):
-%      T(phi) = D(phi) + W*sin(phi)
+%      T(phi) = D(phi) + W*sin(gamma)
 %
-%  NOTA: sin(phi) cambia de signo de forma natural al pasar
-%  de phi=pi a phi=2pi, cubriendo correctamente el descenso.
 
 CD_req = CD0 + k * CL_req.^2;
 D_req  = q * S * CD_req;
-T_req  = D_req + W * sin(phi);
+
+T_req  = D_req + W * abs(sin(phi));
 
 Ps     = V * (T_max - T_req) / W;   % [m/s]  Potencia de exceso específica
-
 [Tmax_val, idx_Tmax] = max(T_req);
 phi_Tmax = rad2deg(phi(idx_Tmax));
 
@@ -204,12 +202,10 @@ if Tmax_val > T_max
     fprintf('  [!] DEFICIT DE EMPUJE: %.0f N (en el %.0f%% de la maniobra).\n', ...
             Tmax_val - T_max, fraccion);
     fprintf('      La hipotesis V=cte no es sostenible en todo el recorrido.\n');
-    fprintf('      En la realidad el avion desacelera en la subida\n');
-    fprintf('      y acelera en la bajada.\n\n');
+    fprintf('      En la realidad el avion perderia mucha velocidad al trepar.\n\n');
 else
     fprintf('  Motor suficiente en todo el recorrido. V=cte es viable.\n\n');
 end
-
 %% ============================================================
 %  BLOQUE 7 — ENVOLVENTE V-n
 % ============================================================
